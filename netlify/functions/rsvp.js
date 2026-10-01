@@ -54,6 +54,17 @@ export default async (request) => {
     });
     const sheets = google.sheets({ version: 'v4', auth });
     const sheetName = (process.env.RSVP_SHEET_NAME || 'RSVP Responses').replace(/'/g, "''");
+    const submittedAt = new Intl.DateTimeFormat('en-LK', {
+      timeZone: 'Asia/Colombo',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+      timeZoneName: 'short',
+    }).format(new Date());
 
     await sheets.spreadsheets.values.append({
       spreadsheetId,
@@ -61,7 +72,7 @@ export default async (request) => {
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       requestBody: {
-        values: [[new Date().toISOString(), name, attendance, guestCount, phone, message]],
+        values: [[submittedAt, name, attendance, guestCount, phone, message]],
       },
     });
 
