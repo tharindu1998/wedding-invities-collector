@@ -34,9 +34,10 @@ iframe[title="Powered by Netlify"] { display: none !important; }
 .hero__image, .hero__wash { position: absolute; inset: 0; z-index: -1; }
 .hero__image {
   background: url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=2400&q=88') center 44% / cover;
+  filter: brightness(1.12) saturate(.88);
   animation: arrive 1.2s ease-out both;
 }
-.hero__wash { background: linear-gradient(180deg, rgba(255, 250, 251, .62), rgba(255, 247, 248, .78) 42%, rgba(255, 255, 255, .78)); }
+.hero__wash { background: linear-gradient(180deg, rgba(255, 255, 255, .76), rgba(255, 250, 251, .87) 42%, rgba(255, 255, 255, .86)); }
 .monogram {
   position: absolute;
   top: 30px;
@@ -135,7 +136,7 @@ iframe[title="Powered by Netlify"] { display: none !important; }
 @media (max-width: 700px) {
   .hero { min-height: 760px; min-height: 100svh; }
   .hero__image { background-position: 54% center; }
-  .hero__wash { background: rgba(255, 247, 246, .72); }
+  .hero__wash { background: rgba(255, 252, 252, .84); }
   .hero__content { padding-top: 90px; }
   .hero__scripture { margin-bottom: 32px; }
   .hero h1 { font-size: clamp(54px, 14.5vw, 94px); }
