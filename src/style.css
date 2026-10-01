@@ -19,6 +19,7 @@ html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; }
+iframe[title="Powered by Netlify"] { display: none !important; }
 
 .hero {
   min-height: min(900px, 100svh);
