@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 const weddingDate = new Date('2027-01-27T08:15:00+05:30');
 const churchMap = 'https://maps.app.goo.gl/jAyANxSCMZVxp43Z7';
 const hotelMap = 'https://maps.app.goo.gl/FJEhGb1gawxALT8T6';
-const rsvpEndpoint = import.meta.env.VITE_RSVP_ENDPOINT;
+const rsvpEndpoint = import.meta.env.VITE_RSVP_ENDPOINT || '/.netlify/functions/rsvp';
 
 function getCountdown() {
   const remaining = Math.max(0, weddingDate.getTime() - Date.now());
@@ -83,6 +83,8 @@ function RsvpForm() {
         body: JSON.stringify(responseData),
       });
       if (!response.ok) throw new Error('RSVP request failed');
+      const result = await response.json();
+      if (result.ok !== true) throw new Error('RSVP was not confirmed');
       form.reset();
       setMessage('Thank you. Your reply has been received.');
     } catch {

@@ -1,4 +1,8 @@
 node_modules
 dist
+.env
 .env.local
+shenalandchristina-*.json
 .DS_Store
+# Local Netlify folder
+.netlify

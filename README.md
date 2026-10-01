@@ -9,8 +9,19 @@ npm install
 npm run dev
 ```
 
-## RSVP endpoint
+The RSVP function runs with Netlify Dev rather than Vite's development server:
 
-The form is ready to send a JSON `POST` to a web endpoint. Add the endpoint URL to `.env.local` as `VITE_RSVP_ENDPOINT`; the request body contains `name`, `attendance`, `guestCount`, `phone`, `message`, and `submittedAt`. The endpoint must accept browser requests from the deployed site and return a successful HTTP status. Until configured, the form directs guests to RSVP using the couple's contact numbers instead of implying that a response was saved.
+```sh
+npx netlify-cli dev
+```
 
-Copy `.env.example` to `.env.local` when configuring the endpoint. A small Google Apps Script web app can later forward the posted fields to a Google Sheet.
+## Connect Google Sheets
+
+The RSVP function appends rows to the `RSVP Responses` tab in the spreadsheet configured by `RSVP_SHEET_ID`. Create that tab if needed and put these headers in row 1, in order: `Submitted At`, `Name / Family`, `RSVP`, `Guests Attending`, `Contact Number`, and `Message`.
+
+1. In Google Cloud, enable the Google Sheets API and create a service account with a JSON key.
+2. Share the spreadsheet with the service account's `client_email` and give it Editor access. Keep the sheet private otherwise.
+3. In Netlify site environment variables, available to Functions, add `RSVP_SHEET_ID` using the ID from the spreadsheet URL and `GOOGLE_SERVICE_ACCOUNT_JSON` using the full contents of the service account JSON key. You can set `RSVP_SHEET_NAME` to a different tab name if needed.
+4. Redeploy the site after setting the variables. Do not put the service account JSON in a `VITE_` variable, commit it, or share it in chat.
+
+Copy `.env.example` to `.env` for local Netlify Dev. Add `GOOGLE_SERVICE_ACCOUNT_JSON` only to your local `.env` file, which must remain untracked. The form reports success only after the function confirms the row was appended.
