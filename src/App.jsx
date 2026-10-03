@@ -196,9 +196,13 @@ export default function App() {
 
   function openInvitation() {
     if (invitationOpening) return;
-    void startMusic();
+    const audio = audioRef.current;
+    if (audio) {
+      setMusicError(false);
+      audio.play().catch(() => setMusicError(true));
+    }
     setInvitationOpening(true);
-    window.setTimeout(() => setInvitationOpened(true), 700);
+    window.setTimeout(() => setInvitationOpened(true), 2600);
   }
 
   return (
