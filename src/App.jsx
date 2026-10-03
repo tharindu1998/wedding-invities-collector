@@ -142,8 +142,8 @@ export default function App() {
       <section className="hero" id="home">
         <div className="hero__image" aria-hidden="true" />
         <div className="hero__wash" aria-hidden="true" />
-        <a className="monogram" href="#home" aria-label="Shenal and Christina">
-          <span>S</span><i>&amp;</i><span>C</span>
+        <a className="monogram" href="#home" aria-label="Christina and Shenal">
+          <span>C</span><i>&amp;</i><span>S</span>
         </a>
         <div className="hero__content">
           <p className="hero__quote">“Many waters cannot quench love, neither can the floods drown it.”</p>
@@ -161,7 +161,7 @@ export default function App() {
         <div className="happy-couple__head">
           <h2>The Happy Couple</h2>
           <span className="happy-couple__rule" aria-hidden="true" />
-          <p>Two hearts, one love story. Meet the bride and groom who are about to begin their forever journey.</p>
+          <p>“Two hearts, one love story.”</p>
         </div>
 
         <div className="happy-couple__grid">
