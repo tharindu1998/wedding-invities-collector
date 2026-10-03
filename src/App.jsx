@@ -149,7 +149,7 @@ export default function App() {
           <p className="hero__quote">“Many waters cannot quench love, neither can the floods drown it.”</p>
           <p className="hero__scripture">Song of Solomon 8:7</p>
           <p className="eyebrow hero__eyebrow">Together with our families</p>
-          <h1><span>Shenal <small>Fernando</small></span><i>&amp;</i><span>Christina <small>Perera</small></span></h1>
+          <h1><span>Christina <small>Perera</small></span><i>&amp;</i><span>Shenal <small>Fernando</small></span></h1>
           <p className="hero__invitation">joyfully invite you to celebrate their marriage</p>
           <p className="hero__date"><span>Wednesday</span><b>27</b><span>January 2027</span></p>
           <a className="button button--rose" href="#celebration">Explore the celebration <span aria-hidden="true">↓</span></a>
@@ -157,7 +157,31 @@ export default function App() {
         <a className="hero__scroll" href="#celebration">Scroll to explore <span aria-hidden="true">↓</span></a>
       </section>
 
-      <section className="celebration section" id="celebration">
+      <section className="happy-couple section" id="celebration">
+        <div className="happy-couple__head">
+          <h2>The Happy Couple</h2>
+          <span className="happy-couple__rule" aria-hidden="true" />
+          <p>Two hearts, one love story. Meet the bride and groom who are about to begin their forever journey.</p>
+        </div>
+
+        <div className="happy-couple__grid">
+          <div className="happy-couple__person">
+          <h3>Christina Perera</h3>
+            <p className="happy-couple__role">The Bride</p>
+          <p className="happy-couple__meta">Daughter of Mr. &amp; Mrs. Anton Priyantha Perera</p>
+          <p className="happy-couple__quote">“I found my forever in Shenal’s eyes”</p>
+          </div>
+
+          <div className="happy-couple__person">
+          <h3>Shenal Fernando</h3>
+            <p className="happy-couple__role">The Groom</p>
+          <p className="happy-couple__meta">Son of Mr. and Mrs. Eardly Fernando</p>
+          <p className="happy-couple__quote">“Christina makes every day feel like magic”</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="celebration section" id="location">
         <div className="section-heading">
           <p className="eyebrow">The celebration</p>
           <h2>A day to remember</h2>
@@ -226,7 +250,7 @@ export default function App() {
       </section>
 
       <footer className="footer">
-        <p className="footer__names">Shenal <i>&amp;</i> Christina</p>
+        <p className="footer__names">Christina <i>&amp;</i> Shenal</p>
         <p>27 · 01 · 2027</p>
         <p className="footer__thanks">Made with love for our wedding celebration</p>
       </footer>
