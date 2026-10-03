@@ -37,7 +37,7 @@ iframe[title="Powered by Netlify"] { display: none !important; }
   filter: brightness(1.12) saturate(.88);
   animation: arrive 1.2s ease-out both;
 }
-.hero__wash { background: linear-gradient(180deg, rgba(255, 255, 255, .76), rgba(255, 250, 251, .87) 42%, rgba(255, 255, 255, .86)); }
+.hero__wash { background: linear-gradient(180deg, rgba(255, 255, 255, .68), rgba(250, 246, 247, .8) 38%, rgba(255, 255, 255, .82)); }
 .monogram {
   position: absolute;
   top: 30px;
