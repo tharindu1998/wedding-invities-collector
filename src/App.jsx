@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const weddingDate = new Date('2027-01-27T08:15:00+05:30');
 const churchMap = 'https://maps.app.goo.gl/jAyANxSCMZVxp43Z7';
@@ -129,6 +129,76 @@ function RsvpForm() {
   );
 }
 
+function BackgroundMusic() {
+  const audioRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.play().catch(() => setAutoplayBlocked(true));
+  }, []);
+
+  async function toggleMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+      return;
+    }
+
+    setAudioError(false);
+    setAutoplayBlocked(false);
+    try {
+      await audio.play();
+    } catch {
+      setAudioError(true);
+      setIsPlaying(false);
+    }
+  }
+
+  return (
+    <div className="music-player">
+      <audio
+        ref={audioRef}
+        src="/A%20Thousand%20Years%20by%20Christina%20Perri%20Violin%20Cover%20Joel%20Grainger.mp3"
+        loop
+        preload="none"
+        onError={() => {
+          setAudioError(true);
+          setIsPlaying(false);
+        }}
+        onPause={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
+      />
+      <button
+        aria-label={isPlaying ? 'Turn wedding music off' : 'Turn wedding music on'}
+        aria-pressed={isPlaying}
+        className="music-player__toggle"
+        onClick={toggleMusic}
+        type="button"
+      >
+        <span aria-hidden="true">♫</span>
+        {isPlaying ? 'Turn music off' : 'Play A Thousand Years'}
+      </button>
+      {audioError && (
+        <p className="music-player__message" role="status">
+          The music track could not be loaded. Check that the audio file is available.
+        </p>
+      )}
+      {autoplayBlocked && !audioError && (
+        <p className="music-player__message" role="status">
+          Your browser blocked autoplay. Tap the music button to start playback.
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function App() {
   const [countdown, setCountdown] = useState(getCountdown);
 
@@ -139,6 +209,7 @@ export default function App() {
 
   return (
     <main>
+      <BackgroundMusic />
       <section className="hero" id="home">
         <div className="hero__image" aria-hidden="true" />
         <div className="hero__wash" aria-hidden="true" />
