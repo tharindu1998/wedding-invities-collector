@@ -67,11 +67,11 @@ iframe[title="Powered by Netlify"] { display: none !important; }
 .button--rose { background: var(--rose-dark); color: white; }
 .hero__scroll { position: absolute; bottom: 25px; color: #754753; font-size: 8px; letter-spacing: .16em; text-decoration: none; text-transform: uppercase; }
 .hero__scroll span { margin-left: 7px; }
-.music-player { position: fixed; top: 22px; right: clamp(18px, 4vw, 56px); z-index: 5; display: grid; justify-items: end; gap: 6px; }
-.music-player__toggle { min-height: 38px; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(143, 80, 95, .5); border-radius: 24px; padding: 0 14px; background: rgba(255, 255, 255, .82); color: var(--rose-dark); cursor: pointer; font-size: 9px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+.music-player { position: fixed; top: 18px; right: clamp(18px, 4vw, 56px); z-index: 5; display: grid; justify-items: end; gap: 6px; }
+.music-player__toggle { min-height: 32px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(143, 80, 95, .5); border-radius: 24px; padding: 0 10px; background: rgba(255, 255, 255, .82); color: var(--rose-dark); cursor: pointer; font-size: 8px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
 .music-player__toggle:hover { background: white; }
 .music-player__toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
-.music-player__toggle span { color: var(--gold); font-size: 16px; }
+.music-player__toggle span { color: var(--gold); font-size: 13px; }
 .music-player__message { max-width: 250px; margin: 0; padding: 8px 10px; border-radius: 4px; background: white; color: var(--ink); font-size: 11px; line-height: 1.5; text-align: right; box-shadow: 0 2px 12px rgba(52, 41, 44, .12); }
 .music-player__message code { font-size: 10px; }
 .invitation-opening { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 24px; background: radial-gradient(ellipse at center, #fffdfb 0%, #fbf6f1 58%, #f1e7dd 100%); text-align: center; transition: opacity 2.3s ease, visibility 2.3s ease; }
