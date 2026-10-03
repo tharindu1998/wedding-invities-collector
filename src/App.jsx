@@ -129,79 +129,7 @@ function RsvpForm() {
   );
 }
 
-function BackgroundMusic() {
-  const audioRef = useRef(null);
-  const interactionCleanupRef = useRef(() => {});
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioError, setAudioError] = useState(false);
-  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    let isActive = true;
-    let removeInteractionListeners = () => {};
-    const startOnInteraction = () => {
-      void audio.play()
-        .then(() => {
-          if (isActive) setAutoplayBlocked(false);
-        })
-        .catch(() => {
-          if (isActive) setAutoplayBlocked(true);
-        });
-    };
-
-    audio.play().catch(() => {
-      if (!isActive) return;
-      setAutoplayBlocked(true);
-
-      const handlePointerDown = (event) => {
-        if (event.target instanceof Element && event.target.closest('.music-player')) return;
-        startOnInteraction();
-        removeInteractionListeners();
-      };
-      const handleKeyDown = () => {
-        startOnInteraction();
-        removeInteractionListeners();
-      };
-      removeInteractionListeners = () => {
-        document.removeEventListener('pointerdown', handlePointerDown);
-        document.removeEventListener('keydown', handleKeyDown);
-        interactionCleanupRef.current = () => {};
-      };
-
-      document.addEventListener('pointerdown', handlePointerDown);
-      document.addEventListener('keydown', handleKeyDown);
-      interactionCleanupRef.current = removeInteractionListeners;
-    });
-
-    return () => {
-      isActive = false;
-      removeInteractionListeners();
-    };
-  }, []);
-
-  async function toggleMusic() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    interactionCleanupRef.current();
-
-    if (isPlaying) {
-      audio.pause();
-      return;
-    }
-
-    setAudioError(false);
-    setAutoplayBlocked(false);
-    try {
-      await audio.play();
-    } catch {
-      setAudioError(true);
-      setIsPlaying(false);
-    }
-  }
-
+function BackgroundMusic({ audioRef, isPlaying, audioError, onToggle, onPlay, onPause, onError }) {
   return (
     <div className="music-player">
       <audio
@@ -209,21 +137,15 @@ function BackgroundMusic() {
         src="/A%20Thousand%20Years%20by%20Christina%20Perri%20Violin%20Cover%20Joel%20Grainger.mp3"
         loop
         preload="none"
-        onError={() => {
-          setAudioError(true);
-          setIsPlaying(false);
-        }}
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => {
-          interactionCleanupRef.current();
-          setIsPlaying(true);
-        }}
+        onError={onError}
+        onPause={onPause}
+        onPlay={onPlay}
       />
       <button
         aria-label={isPlaying ? 'Turn wedding music off' : 'Turn wedding music on'}
         aria-pressed={isPlaying}
         className="music-player__toggle"
-        onClick={toggleMusic}
+        onClick={onToggle}
         type="button"
       >
         <span aria-hidden="true">♫</span>
@@ -231,12 +153,7 @@ function BackgroundMusic() {
       </button>
       {audioError && (
         <p className="music-player__message" role="status">
-          The music track could not be loaded. Check that the audio file is available.
-        </p>
-      )}
-      {autoplayBlocked && !audioError && (
-        <p className="music-player__message" role="status">
-          Tap or interact anywhere on the page to start the music, or use the music button.
+          Music could not start. Use the music button to try again.
         </p>
       )}
     </div>
@@ -245,16 +162,81 @@ function BackgroundMusic() {
 
 export default function App() {
   const [countdown, setCountdown] = useState(getCountdown);
+  const audioRef = useRef(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [musicError, setMusicError] = useState(false);
+  const [invitationOpened, setInvitationOpened] = useState(false);
+  const [invitationOpening, setInvitationOpening] = useState(false);
 
   useEffect(() => {
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
     return () => window.clearInterval(timer);
   }, []);
 
+  async function startMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    setMusicError(false);
+    try {
+      await audio.play();
+    } catch {
+      setMusicError(true);
+      setIsMusicPlaying(false);
+    }
+  }
+
+  function toggleMusic() {
+    if (isMusicPlaying) {
+      audioRef.current?.pause();
+      return;
+    }
+    void startMusic();
+  }
+
+  function openInvitation() {
+    if (invitationOpening) return;
+    void startMusic();
+    setInvitationOpening(true);
+    window.setTimeout(() => setInvitationOpened(true), 700);
+  }
+
   return (
     <main>
-      <BackgroundMusic />
-      <section className="hero" id="home">
+      {!invitationOpened && (
+        <section aria-labelledby="opening-title" aria-modal="true" className={`invitation-opening${invitationOpening ? ' invitation-opening--opening' : ''}`} role="dialog">
+          <div className="invitation-opening__content">
+            <p className="eyebrow" id="opening-title">A wedding invitation for you</p>
+            <button aria-label="Open the wedding invitation and play music" className="invitation-opening__envelope-button" onClick={openInvitation} type="button">
+              <span aria-hidden="true" className="invitation-opening__envelope">
+                <span className="invitation-opening__card">You are invited</span>
+                <span className="invitation-opening__back" />
+                <span className="invitation-opening__flap" />
+                <span className="invitation-opening__front" />
+                <span className="invitation-opening__seal">C <i>&amp;</i> S</span>
+              </span>
+            </button>
+            <p className="invitation-opening__hint">Click the envelope to open</p>
+          </div>
+        </section>
+      )}
+      <div className="invitation-site" inert={!invitationOpened}>
+        <BackgroundMusic
+          audioRef={audioRef}
+          audioError={musicError}
+          isPlaying={isMusicPlaying}
+          onError={() => {
+            setMusicError(true);
+            setIsMusicPlaying(false);
+          }}
+          onPause={() => setIsMusicPlaying(false)}
+          onPlay={() => {
+            setMusicError(false);
+            setIsMusicPlaying(true);
+          }}
+          onToggle={toggleMusic}
+        />
+        <section className="hero" id="home">
         <div className="hero__image" aria-hidden="true" />
         <div className="hero__wash" aria-hidden="true" />
         <a className="monogram" href="#home" aria-label="Christina and Shenal">
@@ -369,6 +351,7 @@ export default function App() {
         <p>27 · 01 · 2027</p>
         <p className="footer__thanks">Made with love for our wedding celebration</p>
       </footer>
+      </div>
     </main>
   );
 }
