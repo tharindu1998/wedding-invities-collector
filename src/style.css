@@ -20,6 +20,9 @@ body { margin: 0; min-width: 320px; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; }
 iframe[title="Powered by Netlify"] { display: none !important; }
+.not-found { min-height: 100svh; display: grid; place-content: center; justify-items: center; gap: 14px; padding: 24px; background: radial-gradient(ellipse at center, #fffdfb 0%, #fbf6f1 58%, #f1e7dd 100%); text-align: center; }
+.not-found h1 { max-width: 520px; margin: 0; color: var(--ink); font: 500 clamp(28px, 5vw, 46px)/1.2 var(--serif); }
+.not-found p:last-child { margin: 0; color: #80666c; font: 15px/1.6 var(--serif); }
 
 .hero {
   min-height: min(900px, 100svh);
@@ -109,6 +112,7 @@ iframe[title="Powered by Netlify"] { display: none !important; }
 .section-heading h2, .countdown h2 { margin: 10px 0 8px; font: 500 clamp(28px, 4vw, 42px)/1.15 var(--serif); }
 .section-heading__date { margin: 0; color: #715b60; font: 15px var(--serif); }
 .venue-grid { width: min(100%, 1030px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: auto; }
+.venue-grid--church-only { max-width: 515px; grid-template-columns: minmax(0, 1fr); }
 .venue { min-height: 380px; padding: 48px 36px; background: var(--paper); text-align: center; }
 .venue__symbol { display: block; margin-bottom: 20px; color: var(--gold); font: 24px var(--serif); }
 .venue h3 { margin: 13px 0 8px; font: 500 clamp(20px, 2.5vw, 26px)/1.25 var(--serif); }

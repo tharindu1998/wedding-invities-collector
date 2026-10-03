@@ -17,15 +17,19 @@ function getCountdown() {
   ];
 }
 
-function CalendarLinks() {
+function CalendarLinks({ churchOnly }) {
   const start = '20270127T024500Z';
   const end = '20270127T034500Z';
   const calendarUrl = new URL('https://calendar.google.com/calendar/render');
   calendarUrl.search = new URLSearchParams({
     action: 'TEMPLATE',
-    text: 'Shenal Fernando & Christina Perera’s Wedding',
+    text: churchOnly
+      ? 'Shenal Fernando & Christina Perera’s Wedding Mass'
+      : 'Shenal Fernando & Christina Perera’s Wedding',
     dates: `${start}/${end}`,
-    details: 'Wedding Mass at St. Anne’s Church, Kurana at 8:15 AM. Reception at Ranowell Hotel, Kochchikade, Negombo. RSVP by 15 December 2026.',
+    details: churchOnly
+      ? 'Wedding Mass at St. Anne’s Church, Kurana at 8:15 AM. RSVP by 15 December 2026.'
+      : 'Wedding Mass at St. Anne’s Church, Kurana at 8:15 AM. Reception at Ranowell Hotel, Kochchikade, Negombo. RSVP by 15 December 2026.',
     location: 'St. Anne’s Church, Kurana',
     ctz: 'Asia/Colombo',
   }).toString();
@@ -35,7 +39,7 @@ function CalendarLinks() {
       <a className="button button--light" href={calendarUrl.toString()} target="_blank" rel="noreferrer">
         <span aria-hidden="true">↗</span> Google Calendar
       </a>
-      <a className="button button--outline" href="/shenal-and-christina-wedding.ics" download>
+      <a className="button button--outline" href={churchOnly ? '/shenal-and-christina-church-wedding.ics' : '/shenal-and-christina-wedding.ics'} download>
         <span aria-hidden="true">↓</span> Apple / Outlook
       </a>
     </div>
@@ -161,6 +165,9 @@ function BackgroundMusic({ audioRef, isPlaying, audioError, onToggle, onPlay, on
 }
 
 export default function App() {
+  const currentPath = window.location.pathname;
+  const isAllowedPath = currentPath === '/church-invitation' || currentPath === '/wedding-invitation';
+  const churchOnly = currentPath === '/church-invitation';
   const [countdown, setCountdown] = useState(getCountdown);
   const audioRef = useRef(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
@@ -169,9 +176,10 @@ export default function App() {
   const [invitationOpening, setInvitationOpening] = useState(false);
 
   useEffect(() => {
+    if (!isAllowedPath) return undefined;
     const timer = window.setInterval(() => setCountdown(getCountdown()), 1000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [isAllowedPath]);
 
   async function startMusic() {
     const audio = audioRef.current;
@@ -203,6 +211,16 @@ export default function App() {
     }
     setInvitationOpening(true);
     window.setTimeout(() => setInvitationOpened(true), 2600);
+  }
+
+  if (!isAllowedPath) {
+    return (
+      <main className="not-found" role="alert">
+        <p className="eyebrow">Page not found</p>
+        <h1>This invitation link is not available.</h1>
+        <p>Please check the URL you were given.</p>
+      </main>
+    );
   }
 
   return (
@@ -288,7 +306,7 @@ export default function App() {
           <h2>A day to remember</h2>
           <p className="section-heading__date">Wednesday, 27 January 2027</p>
         </div>
-        <div className="venue-grid">
+        <div className={`venue-grid${churchOnly ? ' venue-grid--church-only' : ''}`}>
           <Venue
             kind="Holy Matrimony"
             title="St. Anne’s Church, Kurana"
@@ -297,14 +315,16 @@ export default function App() {
             map={churchMap}
             symbol="✝"
           />
-          <Venue
-            kind="Wedding Reception"
-            title="Ranowell Hotel"
-            subtitle="Kochchikade, Negombo"
-            description="We would be delighted to celebrate our wedding with you."
-            map={hotelMap}
-            symbol="❧"
-          />
+          {!churchOnly && (
+            <Venue
+              kind="Wedding Reception"
+              title="Ranowell Hotel"
+              subtitle="Kochchikade, Negombo"
+              description="We would be delighted to celebrate our wedding with you."
+              map={hotelMap}
+              symbol="❧"
+            />
+          )}
         </div>
       </section>
 
@@ -319,7 +339,7 @@ export default function App() {
             </div>
           ))}
         </div>
-        <CalendarLinks />
+        <CalendarLinks churchOnly={churchOnly} />
       </section>
 
       <section className="rsvp-section section" id="rsvp">

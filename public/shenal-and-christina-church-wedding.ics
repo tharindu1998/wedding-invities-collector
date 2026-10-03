@@ -1,0 +1,13 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Shenal and Christina//Church Wedding Invitation//EN
+BEGIN:VEVENT
+UID:shenal-christina-church-20270127@wedding-invitation
+DTSTAMP:20261003T000000Z
+DTSTART:20270127T024500Z
+DTEND:20270127T034500Z
+SUMMARY:Wedding Mass - Shenal Fernando & Christina Perera
+DESCRIPTION:Wedding Mass at St. Anne's Church, Kurana at 8:15 AM.\nRSVP by 15 December 2026.
+LOCATION:St. Anne's Church, Kurana
+END:VEVENT
+END:VCALENDAR
