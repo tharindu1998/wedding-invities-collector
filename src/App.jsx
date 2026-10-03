@@ -131,6 +131,7 @@ function RsvpForm() {
 
 function BackgroundMusic() {
   const audioRef = useRef(null);
+  const interactionCleanupRef = useRef(() => {});
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState(false);
@@ -139,12 +140,52 @@ function BackgroundMusic() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    audio.play().catch(() => setAutoplayBlocked(true));
+    let isActive = true;
+    let removeInteractionListeners = () => {};
+    const startOnInteraction = () => {
+      void audio.play()
+        .then(() => {
+          if (isActive) setAutoplayBlocked(false);
+        })
+        .catch(() => {
+          if (isActive) setAutoplayBlocked(true);
+        });
+    };
+
+    audio.play().catch(() => {
+      if (!isActive) return;
+      setAutoplayBlocked(true);
+
+      const handlePointerDown = (event) => {
+        if (event.target instanceof Element && event.target.closest('.music-player')) return;
+        startOnInteraction();
+        removeInteractionListeners();
+      };
+      const handleKeyDown = () => {
+        startOnInteraction();
+        removeInteractionListeners();
+      };
+      removeInteractionListeners = () => {
+        document.removeEventListener('pointerdown', handlePointerDown);
+        document.removeEventListener('keydown', handleKeyDown);
+        interactionCleanupRef.current = () => {};
+      };
+
+      document.addEventListener('pointerdown', handlePointerDown);
+      document.addEventListener('keydown', handleKeyDown);
+      interactionCleanupRef.current = removeInteractionListeners;
+    });
+
+    return () => {
+      isActive = false;
+      removeInteractionListeners();
+    };
   }, []);
 
   async function toggleMusic() {
     const audio = audioRef.current;
     if (!audio) return;
+    interactionCleanupRef.current();
 
     if (isPlaying) {
       audio.pause();
@@ -173,7 +214,10 @@ function BackgroundMusic() {
           setIsPlaying(false);
         }}
         onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
+        onPlay={() => {
+          interactionCleanupRef.current();
+          setIsPlaying(true);
+        }}
       />
       <button
         aria-label={isPlaying ? 'Turn wedding music off' : 'Turn wedding music on'}
@@ -192,7 +236,7 @@ function BackgroundMusic() {
       )}
       {autoplayBlocked && !audioError && (
         <p className="music-player__message" role="status">
-          Your browser blocked autoplay. Tap the music button to start playback.
+          Tap or interact anywhere on the page to start the music, or use the music button.
         </p>
       )}
     </div>
