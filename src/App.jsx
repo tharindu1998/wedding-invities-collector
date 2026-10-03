@@ -175,7 +175,7 @@ export default function App() {
           <div className="happy-couple__person">
           <h3>Shenal Fernando</h3>
             <p className="happy-couple__role">The Groom</p>
-          <p className="happy-couple__meta">Son of Mr. and Mrs. Eardly Niroshan</p>
+          <p className="happy-couple__meta">Son of Mr. and Mrs. Eardly Niroshan Fernando</p>
           <p className="happy-couple__quote">“Christina makes every day feel like magic”</p>
           </div>
         </div>
